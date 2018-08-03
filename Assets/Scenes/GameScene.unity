@@ -408,3 +408,20 @@ MonoBehaviour:
   cardsData:
     Back: {fileID: 21300000, guid: 1889410b8d0006d40b9a69cfe16992b0, type: 3}
     Front: {fileID: 21300000, guid: c6fbe32a57d784b43bef50b49740018b, type: 3}
+    Clubs: {fileID: 21300000, guid: d66cc8f6047675248a2753122402b634, type: 3}
+    Diamonds: {fileID: 21300000, guid: cb3e14483f702ea4988b836df7bbf68d, type: 3}
+    Hearts: {fileID: 21300000, guid: c05a07e87c7c0634194052654c99437e, type: 3}
+    Spades: {fileID: 21300000, guid: 1269e08c4fbd82e489eb0961cce160e4, type: 3}
+    Ace: {fileID: 21300000, guid: cfbe38a3a40db6d43a3614c6532c9b02, type: 3}
+    Two: {fileID: 21300000, guid: e73c614ae1ff63946bff751d09664379, type: 3}
+    Three: {fileID: 21300000, guid: f07a7d51a5a3d0a4a95d27957e866357, type: 3}
+    Four: {fileID: 21300000, guid: 2b2275ba903e7ea4f89921eef76db032, type: 3}
+    Five: {fileID: 21300000, guid: b47791fc6758b794b857c2dcdf5dc950, type: 3}
+    Six: {fileID: 21300000, guid: 646ad00285f116549ae19f520143dfb1, type: 3}
+    Seven: {fileID: 21300000, guid: 07aab8506c1c9df48b3b7a305d5f053f, type: 3}
+    Eight: {fileID: 21300000, guid: c4f6795eb92034f40928ec0beddd3d10, type: 3}
+    Nine: {fileID: 21300000, guid: e464f2a54997cf941a9ce07d81870549, type: 3}
+    Ten: {fileID: 21300000, guid: c01cce8d589cfeb4d9879de5e4cd94fd, type: 3}
+    Jack: {fileID: 21300000, guid: 414b68083fa708a41acd6c7216c85fa0, type: 3}
+    Queen: {fileID: 21300000, guid: 20a9bc5f3fd56d74d9b555198841d9c6, type: 3}
+    King: {fileID: 21300000, guid: 47c9268b6d086c845972488430e49a41, type: 3}
