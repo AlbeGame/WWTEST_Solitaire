@@ -45,7 +45,13 @@ namespace WWTEST
 
     public struct CardValue
     {
-        public byte Number;
-        public byte Seed; 
+        public uint Number;
+        public uint Seed; 
+
+        public CardValue(uint _num, uint _seed)
+        {
+            Number = _num;
+            Seed = _seed;
+        }
     }
 }

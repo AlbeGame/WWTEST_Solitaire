@@ -7,12 +7,23 @@ namespace WWTEST
         public DeckData cardsData;
         public static GameManager I { get; private set; }
 
+        DeckController deckCtrl;
+
         private void Awake()
         {
             if (GameManager.I != null)
                 DestroyImmediate(this.gameObject);
             else
                 I = this;
+        }
+
+        private void Start()
+        {
+            deckCtrl = GetComponent<DeckController>();
+            if (deckCtrl == null)
+                deckCtrl = gameObject.AddComponent<DeckController>();
+
+            deckCtrl.Init();
         }
 
         [System.Serializable]
