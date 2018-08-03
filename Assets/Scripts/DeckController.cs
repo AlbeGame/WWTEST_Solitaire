@@ -4,12 +4,35 @@ using System.Collections.Generic;
 
 namespace WWTEST
 {
+    /// <summary>
+    /// Class to create and controll the cards and their position (logical)
+    /// </summary>
     public class DeckController : MonoBehaviour
     {
         private static System.Random rng = new System.Random();
 
-        Stack<CardValue> deck = new Stack<CardValue>();
-        Stack<CardValue> drawnCards = new Stack<CardValue>();
+        Stack<CardValue> deck = new Stack<CardValue>();             //actual deck in use
+        Stack<CardValue> drawnCards = new Stack<CardValue>();       //already drawn cards
+
+        [Header("Deck Places")]
+        public Transform DeckPos;
+        public Transform DrawnCardsPos;
+
+        [Header("Seeds Places")]
+        public Transform ClubsPos;
+        public Transform DiamondsPos;
+        public Transform HeartsPos;
+        public Transform SpadesPos;
+
+        [Header("Columns Places")]
+        public Transform Column1Pos;
+        public Transform Column2Pos;
+        public Transform Column3Pos;
+        public Transform Column4Pos;
+        public Transform Column5Pos;
+        public Transform Column6Pos;
+        public Transform Column7Pos;
+
 
         public void Init()
         {
