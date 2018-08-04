@@ -4,24 +4,28 @@ namespace WWTEST
 {
     public class GameManager : MonoBehaviour
     {
-        public DeckData cardsData;
+        public GameObject CardPrefab;
+        public DeckData CardsData;
         public static GameManager I { get; private set; }
-
-        DeckController deckCtrl;
+        public static System.Random RNG { get; private set; }
+        DeckManager deckCtrl;
 
         private void Awake()
         {
             if (GameManager.I != null)
                 DestroyImmediate(this.gameObject);
             else
+            {
                 I = this;
+                RNG = new System.Random();
+            }
         }
 
         private void Start()
         {
-            deckCtrl = GetComponent<DeckController>();
+            deckCtrl = GetComponent<DeckManager>();
             if (deckCtrl == null)
-                deckCtrl = gameObject.AddComponent<DeckController>();
+                deckCtrl = gameObject.AddComponent<DeckManager>();
 
             deckCtrl.Init();
         }

@@ -6,8 +6,8 @@ namespace WWTEST
     [RequireComponent(typeof(BoxCollider2D))]
     public class CardBehaviour : MonoBehaviour
     {
-        Sprite front { get { return GameManager.I.cardsData.Front; } }
-        Sprite back { get { return GameManager.I.cardsData.Back; } }
+        Sprite front { get { return GameManager.I.CardsData.Front; } }
+        Sprite back { get { return GameManager.I.CardsData.Back; } }
 
         SpriteRenderer spriteRnd;
         BoxCollider2D boxColl;
@@ -25,16 +25,30 @@ namespace WWTEST
         public void Flip()
         {
             frontFaced = !frontFaced;
-            boxColl.enabled = false;
+
+            SetInteractable(false);
+
             //Tween that manage rotation and sprite change
             tweenFlip = transform.DORotate(new Vector3(0, 90, 0), flipTime/2).OnComplete(() =>
             {
                 spriteRnd.sprite = frontFaced ? front : back;
                 transform.DORotate(Vector3.zero, flipTime/2).OnComplete(()=> 
                 {
-                    boxColl.enabled = true;
+                    SetInteractable(true);
                 });
             });
+        }
+
+        /// <summary>
+        /// If _interactable = true, than the card is sensible to click and touch
+        /// </summary>
+        /// <param name="_interactable"></param>
+        public void SetInteractable(bool _interactable)
+        {
+            if (_interactable)
+                boxColl.enabled = true;
+            else
+                boxColl.enabled = false;
         }
 
         private void OnMouseUpAsButton()
