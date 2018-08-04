@@ -54,6 +54,7 @@ namespace WWTEST
             if (cardBottom == null)
             {
                 cardBottom = Instantiate(GameManager.I.CardPrefab, transform).GetComponent<CardBehaviour>();
+                cardBottom.Init(this, new CardValue());
                 cardBottom.SetInteractable(false);
             }
 
@@ -61,6 +62,7 @@ namespace WWTEST
             if(cardTop == null)
             {
                 cardTop = Instantiate(GameManager.I.CardPrefab, transform).GetComponent<CardBehaviour>();
+                cardBottom.Init(this, deck.Peek());
             }
         }
     }

@@ -9,15 +9,24 @@ namespace WWTEST
         Sprite front { get { return GameManager.I.CardsData.Front; } }
         Sprite back { get { return GameManager.I.CardsData.Back; } }
 
+        DeckController deckController;
         SpriteRenderer spriteRnd;
         BoxCollider2D boxColl;
         bool frontFaced;
+
+        CardValue value;
         
-        // Use this for initialization
-        void Start()
+        public void Init()
         {
             spriteRnd = GetComponent<SpriteRenderer>();
             boxColl = GetComponent<BoxCollider2D>();
+        }
+
+        public void Init(DeckController _dCtrl, CardValue _value)
+        {
+            deckController = _dCtrl;
+            value = _value;
+            Init();
         }
 
         Tween tweenFlip;
@@ -53,10 +62,15 @@ namespace WWTEST
 
         private void OnMouseUpAsButton()
         {
-            Flip();
         }
     }
 
+    /// <summary>
+    /// A value that a card could have
+    /// Number = 0 means that the card has no proper value
+    /// (i.e. is used to show the backside for graphic pourpose only)
+    /// Seeds: 0 = clubs, 1 = diamonds, 2 = hearts, 3 = spades
+    /// </summary>
     public struct CardValue
     {
         public uint Number;
