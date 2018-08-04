@@ -822,25 +822,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardPrefab: {fileID: 1857538337343516, guid: e9567ea48600a0b41ae501af405458d4, type: 2}
   CardsData:
-    Back: {fileID: 0}
-    Front: {fileID: 0}
-    Clubs: {fileID: 0}
-    Diamonds: {fileID: 0}
-    Hearts: {fileID: 0}
-    Spades: {fileID: 0}
-    Ace: {fileID: 0}
-    Two: {fileID: 0}
-    Three: {fileID: 0}
-    Four: {fileID: 0}
-    Five: {fileID: 0}
-    Six: {fileID: 0}
-    Seven: {fileID: 0}
-    Eight: {fileID: 0}
-    Nine: {fileID: 0}
-    Ten: {fileID: 0}
-    Jack: {fileID: 0}
-    Queen: {fileID: 0}
-    King: {fileID: 0}
+    Back: {fileID: 21300000, guid: 1889410b8d0006d40b9a69cfe16992b0, type: 3}
+    Front: {fileID: 21300000, guid: c6fbe32a57d784b43bef50b49740018b, type: 3}
+    Clubs: {fileID: 21300000, guid: d66cc8f6047675248a2753122402b634, type: 3}
+    Diamonds: {fileID: 21300000, guid: cb3e14483f702ea4988b836df7bbf68d, type: 3}
+    Hearts: {fileID: 21300000, guid: c05a07e87c7c0634194052654c99437e, type: 3}
+    Spades: {fileID: 21300000, guid: 1269e08c4fbd82e489eb0961cce160e4, type: 3}
+    JackRed: {fileID: 21300000, guid: b939cbc3153abe4428ccbc935b8ef5d9, type: 3}
+    JackBlack: {fileID: 21300000, guid: caa1a2a2d6bbc72419a8a0efa5df55c2, type: 3}
+    QueenRed: {fileID: 21300000, guid: 1cd96536218da694bb0abc6feb533559, type: 3}
+    QueenBlack: {fileID: 21300000, guid: 6a3495e56dbcc7746b55a8385128a95f, type: 3}
+    KingRed: {fileID: 21300000, guid: a8d13ee2ce565b347ba1d3aa61d699bb, type: 3}
+    KingBlack: {fileID: 21300000, guid: 654177f34eaeb4448b9289393507fedc, type: 3}
+    Ace: {fileID: 21300000, guid: cfbe38a3a40db6d43a3614c6532c9b02, type: 3}
+    Two: {fileID: 21300000, guid: e73c614ae1ff63946bff751d09664379, type: 3}
+    Three: {fileID: 21300000, guid: f07a7d51a5a3d0a4a95d27957e866357, type: 3}
+    Four: {fileID: 21300000, guid: 2b2275ba903e7ea4f89921eef76db032, type: 3}
+    Five: {fileID: 21300000, guid: b47791fc6758b794b857c2dcdf5dc950, type: 3}
+    Six: {fileID: 21300000, guid: 646ad00285f116549ae19f520143dfb1, type: 3}
+    Seven: {fileID: 21300000, guid: 07aab8506c1c9df48b3b7a305d5f053f, type: 3}
+    Eight: {fileID: 21300000, guid: c4f6795eb92034f40928ec0beddd3d10, type: 3}
+    Nine: {fileID: 21300000, guid: e464f2a54997cf941a9ce07d81870549, type: 3}
+    Ten: {fileID: 21300000, guid: c01cce8d589cfeb4d9879de5e4cd94fd, type: 3}
+    Jack: {fileID: 21300000, guid: 414b68083fa708a41acd6c7216c85fa0, type: 3}
+    Queen: {fileID: 21300000, guid: 20a9bc5f3fd56d74d9b555198841d9c6, type: 3}
+    King: {fileID: 21300000, guid: 47c9268b6d086c845972488430e49a41, type: 3}
 --- !u!114 &114233788235431906
 MonoBehaviour:
   m_ObjectHideFlags: 1

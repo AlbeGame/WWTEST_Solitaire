@@ -41,6 +41,12 @@ namespace WWTEST
             public Sprite Diamonds;
             public Sprite Hearts;
             public Sprite Spades;
+            public Sprite JackRed;
+            public Sprite JackBlack;
+            public Sprite QueenRed;
+            public Sprite QueenBlack;
+            public Sprite KingRed;
+            public Sprite KingBlack;
             [Header("Numbers")]
             public Sprite Ace;
             public Sprite Two;

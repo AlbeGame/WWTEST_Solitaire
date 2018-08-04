@@ -38,7 +38,7 @@ namespace WWTEST
                 for (uint j = 1; j < 14; j++)
                     deck.Push(new CardValue(j, i));
 
-            DeckMain.Init(deck, DeckController.DeckType.Main);
+            DeckMain.Init(this, deck, DeckController.DeckType.Main);
             DeckMain.Shuffle();
             DeckMain.DisplayDownFaced();
         }
