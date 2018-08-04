@@ -7,13 +7,20 @@ namespace WWTEST
     /// <summary>
     /// Manage the cards position and their displayed status
     /// </summary>
+    [RequireComponent(typeof(BoxCollider2D))]
     public class DeckController : MonoBehaviour
     {
-        Stack<CardValue> deck = new Stack<CardValue>();
+        BoxCollider2D inputCollider;
 
-        public void Init(Stack<CardValue> _deck)
+        Stack<CardValue> deck = new Stack<CardValue>();
+        DeckType deckType;
+
+        public void Init(Stack<CardValue> _deck, DeckType _type)
         {
+            inputCollider = GetComponent<BoxCollider2D>();
+
             deck = _deck;
+            deckType = _type;
         }
 
         /// <summary>
@@ -55,7 +62,6 @@ namespace WWTEST
             {
                 cardBottom = Instantiate(GameManager.I.CardPrefab, transform).GetComponent<CardBehaviour>();
                 cardBottom.Init(this, new CardValue());
-                cardBottom.SetInteractable(false);
             }
 
             //Graphic for the card on the top of the deck
@@ -64,6 +70,24 @@ namespace WWTEST
                 cardTop = Instantiate(GameManager.I.CardPrefab, transform).GetComponent<CardBehaviour>();
                 cardBottom.Init(this, deck.Peek());
             }
+        }
+
+        public void DrawCard()
+        {
+            cardTop.Flip();
+        }
+
+        public void OnInputRecived()
+        {
+
+        }
+
+        public enum DeckType
+        {
+            Main,
+            DrawnCards,
+            Column,
+            Seed
         }
     }
 }
