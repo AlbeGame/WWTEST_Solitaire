@@ -41,6 +41,46 @@ namespace WWTEST
             DeckMain.Init(this, deck, DeckController.DeckType.Main);
             DeckMain.Shuffle();
             DeckMain.DisplayCard(new CardValue(), false);
+
+            DeckColumn1.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
+            GiveStartingCards(DeckColumn1, 1);
+            DeckColumn2.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
+            GiveStartingCards(DeckColumn2, 2);
+            DeckColumn3.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
+            GiveStartingCards(DeckColumn3, 3);
+            DeckColumn4.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
+            GiveStartingCards(DeckColumn4, 4);
+            DeckColumn5.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
+            GiveStartingCards(DeckColumn5, 5);
+            DeckColumn6.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
+            GiveStartingCards(DeckColumn6, 6);
+            DeckColumn7.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
+            GiveStartingCards(DeckColumn7, 7);
+        }
+
+        /// <summary>
+        /// Give starting cards
+        /// One front faced and the others down faced
+        /// </summary>
+        /// <param name="_dCtrl"></param>
+        /// <param name="_amount"></param>
+        public void GiveStartingCards(DeckController _dCtrl, short _amount)
+        {
+            while(_amount > 1)
+            {
+                DeckMain.DrawCard(false);
+                DeckMain.TransferTopCard(_dCtrl);
+                _amount--;
+            }
+
+            if(_amount == 1)
+            {
+                DeckMain.DrawCard(true);
+                DeckMain.TransferTopCard(_dCtrl);
+                return;
+            }
+
+            return;
         }
     }
 }

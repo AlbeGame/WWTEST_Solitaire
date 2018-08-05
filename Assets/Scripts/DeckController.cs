@@ -24,9 +24,6 @@ namespace WWTEST
 
             deck = _deck;
             deckType = _type;
-
-            //Add graphic for a down faced card
-            DisplayCard(new CardValue(), false);
         }
 
         /// <summary>
@@ -58,14 +55,14 @@ namespace WWTEST
             {
                 for (int i = 0; i < deckGraphic.Count; i++)
                 {
-                    deckGraphic[i].Move(transform.position + Vector3.right * i * HorizontalOffSet);
+                    deckGraphic[i].Move(transform.position + Vector3.right * i * HorizontalOffSet + Vector3.back * i * 0.01f);
                 }
             }
             else if(deckType == DeckType.Column)
             {
                 for (int i = 0; i < deckGraphic.Count; i++)
                 {
-                    deckGraphic[i].Move(transform.position + Vector3.down * i * VerticalOffSet);
+                    deckGraphic[i].Move(transform.position + Vector3.down * i * VerticalOffSet + Vector3.back * i * 0.01f);
                 }
             }
         }
@@ -110,12 +107,13 @@ namespace WWTEST
         /// <summary>
         /// Draw a card from the top of the deck
         /// </summary>
-        public void DrawCard()
+        public void DrawCard(bool _doFlip)
         {
             //Create graphic for the card to flip
             DisplayCard(deck.Last(), false);
             //Turn and show the card
-            deckGraphic.Last().Flip();
+            if(_doFlip)
+                deckGraphic.Last().Flip();
         }
 
         /// <summary>
@@ -125,6 +123,7 @@ namespace WWTEST
         public void TransferTopCard(DeckController _newDeck)
         {
             CardBehaviour card = RemoveTopCard();
+            card.transform.parent = _newDeck.transform;
             _newDeck.AddTopCard(card);
         }
 
@@ -138,6 +137,8 @@ namespace WWTEST
             deckGraphic.Add(_newCard);
 
             DisplayCard(_newCard, false);
+
+            OrderCards();
         }
 
         /// <summary>
