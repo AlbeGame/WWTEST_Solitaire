@@ -32,15 +32,15 @@ namespace WWTEST
         /// </summary>
         public void Init()
         {
-            Stack<CardValue> deck = new Stack<CardValue>();
+            List<CardValue> deck = new List<CardValue>();
 
             for (uint i = 0; i < 4; i++)
                 for (uint j = 1; j < 14; j++)
-                    deck.Push(new CardValue(j, i));
+                    deck.Add(new CardValue(j, i));
 
             DeckMain.Init(this, deck, DeckController.DeckType.Main);
             DeckMain.Shuffle();
-            DeckMain.DisplayDownFaced();
+            DeckMain.DisplayCard(new CardValue(), false);
         }
     }
 }

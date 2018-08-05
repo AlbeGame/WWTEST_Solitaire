@@ -8,7 +8,6 @@ namespace WWTEST
         Sprite front { get { return GameManager.I.CardsData.Front; } }
         Sprite back { get { return GameManager.I.CardsData.Back; } }
 
-        DeckController deckController;
         public Color ColorRed = Color.red;
         public Color ColorBlack = Color.black;
         public SpriteRenderer SpriteRndBase;
@@ -19,9 +18,8 @@ namespace WWTEST
 
         CardValue value;
 
-        public void Init(DeckController _dCtrl, CardValue _value)
+        public void Init(CardValue _value)
         {
-            deckController = _dCtrl;
             SetValue(_value);
         }
 
@@ -73,6 +71,11 @@ namespace WWTEST
             tweenMove = transform.DOMove(_targetPos, moveTime);
         }
 
+        /// <summary>
+        /// Cange the value of the card
+        /// and the graphic as well
+        /// </summary>
+        /// <param name="_newValue"></param>
         public void SetValue(CardValue _newValue)
         {
             value = _newValue;
@@ -88,6 +91,15 @@ namespace WWTEST
 
             //Assign Center sprite
             SetCenterSprite(value);
+        }
+
+        /// <summary>
+        /// Return the value of the card
+        /// </summary>
+        /// <returns></returns>
+        public CardValue GetValue()
+        {
+            return value;
         }
 
         /// <summary>

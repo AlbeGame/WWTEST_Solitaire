@@ -13,16 +13,20 @@ namespace WWTEST
         BoxCollider2D inputCollider;
         DeckManager deckMng;
 
-        Stack<CardValue> deck = new Stack<CardValue>();
+        List<CardValue> deck = new List<CardValue>();
+        List<CardBehaviour> deckGraphic = new List<CardBehaviour>();
         DeckType deckType;
 
-        public void Init(DeckManager _mng, Stack<CardValue> _deck, DeckType _type)
+        public void Init(DeckManager _mng, List<CardValue> _deck, DeckType _type)
         {
             inputCollider = GetComponent<BoxCollider2D>();
             deckMng = _mng;
 
             deck = _deck;
             deckType = _type;
+
+            //Add graphic for a down faced card
+            DisplayCard(new CardValue(), false);
         }
 
         /// <summary>
@@ -30,72 +34,130 @@ namespace WWTEST
         /// </summary>
         public void Shuffle()
         {
-            //Cast to list and shuffle
-            List<CardValue> listedDeck = deck.ToList();
-            int n = listedDeck.Count;
+            int n = deck.Count;
             while (n > 1)
             {
                 n--;
                 int k = GameManager.RNG.Next(n + 1);
-                CardValue value = listedDeck[k];
-                listedDeck[k] = listedDeck[n];
-                listedDeck[n] = value;
+                CardValue value = deck[k];
+                deck[k] = deck[n];
+                deck[n] = value;
             }
+        }
 
-            //Cast to stack
-            Stack<CardValue> shuffledDeck = new Stack<CardValue>();
-            for (int i = 0; i < listedDeck.Count; i++)
+        [Tooltip("OffSet between cards when displayed horizontal")]
+        public float HorizontalOffSet = .5f;
+        [Tooltip("OffSet between cards when displayed vertical")]
+        public float VerticalOffSet = .5f;
+        /// <summary>
+        /// Update the graphic displacement of the cards
+        /// </summary>
+        public void OrderCards()
+        {
+            if(deckType == DeckType.DrawnCards)
             {
-                shuffledDeck.Push(listedDeck[i]);
+                for (int i = 0; i < deckGraphic.Count; i++)
+                {
+                    deckGraphic[i].Move(transform.position + Vector3.right * i * HorizontalOffSet);
+                }
             }
-
-            deck = shuffledDeck;
-        }
-
-        CardBehaviour cardBottom;
-        CardBehaviour cardTop;
-        public void DisplayDownFaced()
-        {
-            if (deck.Count <= 0)
-                return;
-
-            //Create graphic for the bottom deck card
-            if (cardBottom == null)
+            else if(deckType == DeckType.Column)
             {
-                cardBottom = Instantiate(GameManager.I.CardPrefab, transform).GetComponent<CardBehaviour>();
-                cardBottom.Init(this, new CardValue());
+                for (int i = 0; i < deckGraphic.Count; i++)
+                {
+                    deckGraphic[i].Move(transform.position + Vector3.down * i * VerticalOffSet);
+                }
             }
-
-            //Graphic for the card on the top of the deck
-            ShowTopCard();
-        }
-
-        public void DrawCard()
-        {
-            cardTop.Flip();
-        }
-
-        public void RemoveTopCard()
-        {
-            if (deck.Count <= 0)
-                return;
-
-            deck.Pop();
-            ShowTopCard();
         }
 
         /// <summary>
-        /// Adjust graphic and values for the card on the top
+        /// Display a card on the top of the deck
         /// </summary>
-        public void ShowTopCard()
+        public void DisplayCard(CardValue _cardValue, bool _overrideLast)
         {
-            if (cardTop == null)
+            if(_overrideLast && deckGraphic.Count > 0)
             {
-                cardTop = Instantiate(GameManager.I.CardPrefab, transform).GetComponent<CardBehaviour>();
-                cardTop.Init(this, deck.Peek());
+                deckGraphic.Last().SetValue(_cardValue);
             }
             else
-                cardTop.SetValue(deck.Peek());
+            {
+                CardBehaviour cardFacedDown = Instantiate(GameManager.I.CardPrefab, transform).GetComponent<CardBehaviour>();
+                cardFacedDown.Init(_cardValue);
+
+                deckGraphic.Add(cardFacedDown);
+            }
+        }
+
+        /// <summary>
+        /// Display a card on the top of the deck
+        /// If _overrideLast == true, _card will be destroyed
+        /// </summary>
+        /// <param name="_card"></param>
+        /// <param name="_overrideLast"></param>
+        public void DisplayCard(CardBehaviour _card, bool _overrideLast)
+        {
+            if (_overrideLast && deckGraphic.Count > 0)
+            {
+                deckGraphic.Last().SetValue(_card.GetValue());
+                Destroy(_card.gameObject);
+            }
+            else
+            {
+                deckGraphic.Add(_card);
+            }
+        }
+
+        /// <summary>
+        /// Draw a card from the top of the deck
+        /// </summary>
+        public void DrawCard()
+        {
+            //Create graphic for the card to flip
+            DisplayCard(deck.Last(), false);
+            //Turn and show the card
+            deckGraphic.Last().Flip();
+        }
+
+        /// <summary>
+        /// Transfer the card from this deck to another
+        /// </summary>
+        /// <param name="_newDeck"></param>
+        public void TransferTopCard(DeckController _newDeck)
+        {
+            CardBehaviour card = RemoveTopCard();
+            _newDeck.AddTopCard(card);
+        }
+
+        /// <summary>
+        /// Add a card to the deck
+        /// </summary>
+        /// <param name="_newCard"></param>
+        public void AddTopCard(CardBehaviour _newCard)
+        {
+            deck.Add(_newCard.GetValue());
+            deckGraphic.Add(_newCard);
+
+            DisplayCard(_newCard, false);
+        }
+
+        /// <summary>
+        /// Remove the card on the top of the deck
+        /// Return null if there are none
+        /// </summary>
+        /// <returns></returns>
+        public CardBehaviour RemoveTopCard()
+        {
+            if (deck.Count > 0)
+                deck.RemoveAt(deck.Count-1);
+
+            if (deckGraphic.Count > 0)
+            {
+                CardBehaviour card = deckGraphic.Last();
+                deckGraphic.RemoveAt(deckGraphic.Count - 1);
+                return card;
+            }
+
+            return null;
         }
 
         public enum DeckType
