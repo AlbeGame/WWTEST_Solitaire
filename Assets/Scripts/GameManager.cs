@@ -8,7 +8,7 @@ namespace WWTEST
         public DeckData CardsData;
         public static GameManager I { get; private set; }
         public static System.Random RNG { get; private set; }
-        DeckManager deckCtrl;
+        public DeckManager deckCtrl { get; private set; }
 
         private void Awake()
         {

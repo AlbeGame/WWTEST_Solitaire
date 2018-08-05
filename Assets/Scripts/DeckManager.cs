@@ -37,11 +37,13 @@ namespace WWTEST
             for (uint i = 0; i < 4; i++)
                 for (uint j = 1; j < 14; j++)
                     deck.Add(new CardValue(j, i));
-
+            //Init of the Main Deck
             DeckMain.Init(this, deck, DeckController.DeckType.Main);
             DeckMain.Shuffle();
             DeckMain.DisplayCard(new CardValue(), false);
-
+            //Init of the drawned cards deck
+            DeckDrawnCards.Init(this, new List<CardValue>(), DeckController.DeckType.DrawnCards);
+            //Init of the column decks
             DeckColumn1.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
             GiveStartingCards(DeckColumn1, 1);
             DeckColumn2.Init(this, new List<CardValue>(), DeckController.DeckType.Column);

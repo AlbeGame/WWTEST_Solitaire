@@ -51,19 +51,35 @@ namespace WWTEST
         /// </summary>
         public void OrderCards()
         {
+            //Behaviour specific for the drawned cards
             if(deckType == DeckType.DrawnCards)
             {
+                if(deckGraphic.Count > 3)
+                {
+                    for (int i = 0; i < deckGraphic.Count - 3; i++)
+                    {
+                        Destroy(deckGraphic[i].gameObject);
+                    }
+
+                    deckGraphic = deckGraphic.Skip(deckGraphic.Count -3).ToList();
+                }
+
                 for (int i = 0; i < deckGraphic.Count; i++)
                 {
                     deckGraphic[i].Move(transform.position + Vector3.right * i * HorizontalOffSet + Vector3.back * i * 0.01f);
                 }
+
+                inputCollider.offset = Vector2.right * HorizontalOffSet * (deckGraphic.Count-1) / 2;
+                inputCollider.size = inputCollider.size + Vector2.right * HorizontalOffSet * (deckGraphic.Count-1) / 4;
             }
+            //Behaviour specific for the columned cards
             else if(deckType == DeckType.Column)
             {
                 for (int i = 0; i < deckGraphic.Count; i++)
                 {
                     deckGraphic[i].Move(transform.position + Vector3.down * i * VerticalOffSet + Vector3.back * i * 0.01f);
                 }
+                inputCollider.offset = Vector2.down * HorizontalOffSet * (deckGraphic.Count-1);
             }
         }
 
@@ -134,7 +150,6 @@ namespace WWTEST
         public void AddTopCard(CardBehaviour _newCard)
         {
             deck.Add(_newCard.GetValue());
-            deckGraphic.Add(_newCard);
 
             DisplayCard(_newCard, false);
 
@@ -159,6 +174,15 @@ namespace WWTEST
             }
 
             return null;
+        }
+
+        private void OnMouseUpAsButton()
+        {
+            if(deckType == DeckType.Main)
+            {
+                DrawCard(true);
+                TransferTopCard(GameManager.I.deckCtrl.DeckDrawnCards);
+            }
         }
 
         public enum DeckType
