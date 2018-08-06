@@ -15,7 +15,7 @@ namespace WWTEST
 
         List<CardValue> deck = new List<CardValue>();
         List<CardBehaviour> deckGraphic = new List<CardBehaviour>();
-        DeckType deckType;
+        public DeckType deckType { get; private set; }
 
         public void Init(DeckManager _mng, List<CardValue> _deck, DeckType _type)
         {
@@ -139,7 +139,6 @@ namespace WWTEST
         public void TransferTopCard(DeckController _newDeck)
         {
             CardBehaviour card = RemoveTopCard();
-            card.transform.parent = _newDeck.transform;
             _newDeck.AddTopCard(card);
         }
 
@@ -150,6 +149,7 @@ namespace WWTEST
         public void AddTopCard(CardBehaviour _newCard)
         {
             deck.Add(_newCard.GetValue());
+            _newCard.transform.parent = transform;
 
             DisplayCard(_newCard, false);
 
@@ -176,15 +176,36 @@ namespace WWTEST
             return null;
         }
 
-        private void OnMouseUpAsButton()
+        /// <summary>
+        /// Return the value of the card on top
+        /// </summary>
+        /// <returns></returns>
+        public CardValue GetTopCardValue()
         {
-            if(deckType == DeckType.Main)
-            {
-                DrawCard(true);
-                TransferTopCard(GameManager.I.deckCtrl.DeckDrawnCards);
-            }
+            return deckGraphic.Last().GetValue();
         }
 
+        #region Collider based Input
+        private void OnMouseUpAsButton()
+        {
+            deckMng.OnInputDonwAndUpRecived(this);
+        }
+
+        private void OnMouseDown()
+        {
+            deckMng.OnInputDownRecived(this);
+        }
+
+        private void OnMouseEnter()
+        {
+            deckMng.OnInputEnterRecived(this);
+        }
+
+        private void OnMouseExit()
+        {
+            deckMng.OnInputExit(this);
+        }
+        #endregion
         public enum DeckType
         {
             Main,
