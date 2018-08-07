@@ -9,6 +9,7 @@ namespace WWTEST
         public static GameManager I { get; private set; }
         public static System.Random RNG { get; private set; }
         public DeckManager DeckCtrl { get; private set; }
+        public MovesController MoveCtrl { get; private set; }
         public InterfaceController InterfaceCtrl { get; private set; }
 
         private void Awake()
@@ -30,6 +31,13 @@ namespace WWTEST
                 DeckCtrl = gameObject.AddComponent<DeckManager>();
 
             DeckCtrl.Init();
+
+            //Initialize the move controller
+            MoveCtrl = GetComponent<MovesController>();
+            if (MoveCtrl == null)
+                MoveCtrl = gameObject.AddComponent<MovesController>();
+
+            MoveCtrl.Init();
 
             //Initialize the interface controller
             InterfaceCtrl = FindObjectOfType<InterfaceController>();

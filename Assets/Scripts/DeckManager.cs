@@ -97,9 +97,13 @@ namespace WWTEST
                     //Check if the card added is one more greater than actual and if they are of the same seed
                     if (CheckIfCardMatch(currentDeckInputOver.GetTopCardValue(), draggedCard.GetValue(), true))
                     {
+                        GameManager.I.MoveCtrl.RecordMove(0, draggedCard, draggedCardOriginalDeck, currentDeckInputOver);
                         //Assing 5 points from a card that come in column from outside
                         if (draggedCardOriginalDeck.deckType != DeckController.DeckType.Column)
+                        {
                             AssignPoints(5);
+                            GameManager.I.MoveCtrl.GetLastMove().PointsGiven = 5;
+                        }
 
                         //Assign a move
                         AssignMove();
@@ -116,6 +120,8 @@ namespace WWTEST
                         //Assign 10 points for a card in the seed decks
                         AssignPoints(10);
 
+                        GameManager.I.MoveCtrl.RecordMove(10, draggedCard, draggedCardOriginalDeck, currentDeckInputOver);
+
                         //Assign a move
                         AssignMove();
 
@@ -130,8 +136,10 @@ namespace WWTEST
 
         /// <summary>
         /// Check main rule of solitaire
-        /// Only high card on lower
-        /// Only if of the same seed
+        /// if doesn't _useColumnRules than
+        /// Only high card on lower and only of the same seed
+        /// Otherwise (_useColumnRules == true)
+        /// Lower cards on higher and seeds doesn't matter
         /// </summary>
         /// <param name="_base"></param>
         /// <param name="_addition"></param>
@@ -183,7 +191,10 @@ namespace WWTEST
                 if(draggedCardOriginalDeck.IsTopCardFrontSide)                          //Add the card to the new deck and flip the top   
                     draggedCardOriginalDeck.DrawCard(true, false);                      //card of the original deck if it wasn't already flipped (front side)
                 else
+                {
+                    AssignPoints(5);                                                    //Special case: assign 5 points if a card in column is reveald
                     draggedCardOriginalDeck.DrawCard(true, true);
+                }
             }
             else if (draggedCardOriginalDeck.deckType == DeckController.DeckType.DrawnCards)
             {

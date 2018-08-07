@@ -3,6 +3,9 @@ using DG.Tweening;
 
 namespace WWTEST
 {
+    /// <summary>
+    /// Class that implement main cards behaviours
+    /// </summary>
     public class CardBehaviour : MonoBehaviour
     {
         Sprite front { get { return GameManager.I.CardsData.Front; } }
