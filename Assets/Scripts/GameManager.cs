@@ -8,7 +8,8 @@ namespace WWTEST
         public DeckData CardsData;
         public static GameManager I { get; private set; }
         public static System.Random RNG { get; private set; }
-        public DeckManager deckCtrl { get; private set; }
+        public DeckManager DeckCtrl { get; private set; }
+        public InterfaceController InterfaceCtrl { get; private set; }
 
         private void Awake()
         {
@@ -23,11 +24,16 @@ namespace WWTEST
 
         private void Start()
         {
-            deckCtrl = GetComponent<DeckManager>();
-            if (deckCtrl == null)
-                deckCtrl = gameObject.AddComponent<DeckManager>();
+            //Initialize the deck controller
+            DeckCtrl = GetComponent<DeckManager>();
+            if (DeckCtrl == null)
+                DeckCtrl = gameObject.AddComponent<DeckManager>();
 
-            deckCtrl.Init();
+            DeckCtrl.Init();
+
+            //Initialize the interface controller
+            InterfaceCtrl = FindObjectOfType<InterfaceController>();
+            InterfaceCtrl.Init();
         }
 
         [System.Serializable]

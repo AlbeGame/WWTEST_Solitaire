@@ -97,6 +97,13 @@ namespace WWTEST
                     //Check if the card added is one more greater than actual and if they are of the same seed
                     if (CheckIfCardMatch(currentDeckInputOver.GetTopCardValue(), draggedCard.GetValue(), true))
                     {
+                        //Assing 5 points from a card that come in column from outside
+                        if (draggedCardOriginalDeck.deckType != DeckController.DeckType.Column)
+                            AssignPoints(5);
+
+                        //Assign a move
+                        AssignMove();
+
                         currentDeckInputOver.AddTopCard(draggedCard);
                         ReleaseDraggedCard(false);
                     }
@@ -106,6 +113,12 @@ namespace WWTEST
                     //Check if the card added is one less than actual and if they are of the same seed
                     if (CheckIfCardMatch(currentDeckInputOver.GetTopCardValue(), draggedCard.GetValue(), false))
                     {
+                        //Assign 10 points for a card in the seed decks
+                        AssignPoints(10);
+
+                        //Assign a move
+                        AssignMove();
+
                         currentDeckInputOver.AddTopCard(draggedCard);
                         ReleaseDraggedCard(false);
                     }
@@ -180,6 +193,23 @@ namespace WWTEST
 
             draggedCard = null;
             isDragging = false;
+        }
+
+        /// <summary>
+        /// Assign points to interface
+        /// </summary>
+        /// <param name="_amount"></param>
+        private void AssignPoints(int _amount)
+        {
+            GameManager.I.InterfaceCtrl.AddPoints(_amount);
+        }
+
+        /// <summary>
+        /// Add 1 move to interface
+        /// </summary>
+        private void AssignMove()
+        {
+            GameManager.I.InterfaceCtrl.AddMoves();
         }
 
         /// <summary>
