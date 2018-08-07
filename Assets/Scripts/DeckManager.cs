@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace WWTEST
@@ -124,27 +123,34 @@ namespace WWTEST
         /// <param name="_base"></param>
         /// <param name="_addition"></param>
         /// <returns></returns>
-        private bool CheckIfCardMatch(CardValue _base, CardValue _addition, bool _ascendent)
+        private bool CheckIfCardMatch(CardValue _base, CardValue _addition, bool _useColumnRules)
         {
             //False if backsided card
             if (_addition.Number == 0)
                 return false;
 
-            //Ace exception
-            if (_base.Number == 0 && _addition.Number == 1)
-                return true;
-
-            if (_base.Seed != _addition.Seed)
-                return false;
-
-            if (_ascendent)
+            if (_useColumnRules)
             {
+                //Always allow a card drop on a empty column
+                if (_base.Number == 0)
+                    return true;
+
                 if (_base.Number != _addition.Number + 1)
                     return false;
             }
             else
+            {
+                //Ace exception
+                if (_base.Number == 0 && _addition.Number == 1)
+                    return true;
+
+                //Cards have to be of the same seed only for the seed decks
+                if (_base.Seed != _addition.Seed)
+                    return false;
+
                 if (_base.Number != _addition.Number - 1)
-                return false;
+                    return false;
+            }
 
             return true;
         }
@@ -158,13 +164,18 @@ namespace WWTEST
                 return;
 
             if (_giveBackToOriginalDeck)
-                draggedCardOriginalDeck.AddTopCard(draggedCard);
+                draggedCardOriginalDeck.AddTopCard(draggedCard);                        //Return the card to original Deck
             else if(draggedCardOriginalDeck.deckType == DeckController.DeckType.Column)
-                draggedCardOriginalDeck.DrawCard(true, true);
+            {
+                if(draggedCardOriginalDeck.IsTopCardFrontSide)                          //Add the card to the new deck and flip the top   
+                    draggedCardOriginalDeck.DrawCard(true, false);                      //card of the original deck if it wasn't already flipped (front side)
+                else
+                    draggedCardOriginalDeck.DrawCard(true, true);
+            }
             else if (draggedCardOriginalDeck.deckType == DeckController.DeckType.DrawnCards)
             {
-                draggedCardOriginalDeck.DrawCard(true, false);
-                draggedCardOriginalDeck.OrderCards();
+                draggedCardOriginalDeck.DrawCard(true, false);                          //Never flip the drawn cards (they are already fron side)
+                draggedCardOriginalDeck.OrderCards();                                   //Always update their displacement
             }
 
             draggedCard = null;
