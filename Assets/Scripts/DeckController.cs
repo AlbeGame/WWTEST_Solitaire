@@ -10,16 +10,25 @@ namespace WWTEST
     [RequireComponent(typeof(BoxCollider2D))]
     public class DeckController : MonoBehaviour
     {
-        BoxCollider2D inputCollider;
         DeckManager deckMng;
 
         List<CardValue> deck = new List<CardValue>();
         List<CardBehaviour> deckGraphic = new List<CardBehaviour>();
+        public bool IsTopCardFrontSide {
+            get
+            {
+                if(deckGraphic.Count > 0)
+                {
+                    return deckGraphic.Last().FrontFaced;
+                }
+
+                return false;
+            }
+        }
         public DeckType deckType { get; private set; }
 
         public void Init(DeckManager _mng, List<CardValue> _deck, DeckType _type)
         {
-            inputCollider = GetComponent<BoxCollider2D>();
             deckMng = _mng;
 
             deck = _deck;
@@ -63,14 +72,20 @@ namespace WWTEST
 
                     deckGraphic = deckGraphic.Skip(deckGraphic.Count -3).ToList();
                 }
+                else if(deck.Count >= 3)
+                {
+                    DisplayCard(deck[deck.Count - 3], false);
+                    deckGraphic.Last().Flip();
+                    deckGraphic.Insert(0, deckGraphic.Last());
+                    deckGraphic.RemoveAt(deckGraphic.Count - 1);
+                    OrderCards();
+                    return;
+                }
 
                 for (int i = 0; i < deckGraphic.Count; i++)
                 {
                     deckGraphic[i].Move(transform.position + Vector3.right * i * HorizontalOffSet + Vector3.back * i * 0.01f);
                 }
-
-                inputCollider.offset = Vector2.right * HorizontalOffSet * (deckGraphic.Count-1) / 2;
-                inputCollider.size = inputCollider.size + Vector2.right * HorizontalOffSet * (deckGraphic.Count-1) / 4;
             }
             //Behaviour specific for the columned cards
             else if(deckType == DeckType.Column)
@@ -79,7 +94,13 @@ namespace WWTEST
                 {
                     deckGraphic[i].Move(transform.position + Vector3.down * i * VerticalOffSet + Vector3.back * i * 0.01f);
                 }
-                inputCollider.offset = Vector2.down * HorizontalOffSet * (deckGraphic.Count-1);
+            }
+            else
+            {
+                for (int i = 0; i < deckGraphic.Count; i++)
+                {
+                    deckGraphic[i].Move(transform.position + Vector3.back * (i+1) * 0.01f);
+                }
             }
         }
 
@@ -90,6 +111,13 @@ namespace WWTEST
         {
             if(_overrideLast && deckGraphic.Count > 0)
             {
+                //Prevent override of nothing
+                if (deckGraphic.Count == 0)
+                {
+                    DisplayCard(_cardValue, false);
+                    return;
+                }
+
                 deckGraphic.Last().SetValue(_cardValue);
             }
             else
@@ -111,6 +139,13 @@ namespace WWTEST
         {
             if (_overrideLast && deckGraphic.Count > 0)
             {
+                //Prevent override of nothing
+                if (deckGraphic.Count == 0)
+                {
+                    DisplayCard(_card, false);
+                    return;
+                }
+
                 deckGraphic.Last().SetValue(_card.GetValue());
                 Destroy(_card.gameObject);
             }
@@ -123,12 +158,13 @@ namespace WWTEST
         /// <summary>
         /// Draw a card from the top of the deck
         /// </summary>
-        public void DrawCard(bool _doFlip)
+        public void DrawCard(bool _overrideLast, bool _doFlip)
         {
             //Create graphic for the card to flip
-            DisplayCard(deck.Last(), false);
+            if(deck.Count > 0)
+                DisplayCard(deck.Last(), _overrideLast);
             //Turn and show the card
-            if(_doFlip)
+            if(_doFlip && deckGraphic.Count > 0)
                 deckGraphic.Last().Flip();
         }
 
@@ -182,7 +218,10 @@ namespace WWTEST
         /// <returns></returns>
         public CardValue GetTopCardValue()
         {
-            return deckGraphic.Last().GetValue();
+            if (deckGraphic.Count > 0)
+                return deckGraphic.Last().GetValue();
+            else
+                return new CardValue();
         }
 
         #region Collider based Input

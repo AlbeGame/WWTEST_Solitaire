@@ -14,7 +14,7 @@ namespace WWTEST
         public SpriteRenderer SpriteRndCenter;
         public SpriteRenderer SpriteRndTopRight;
         public SpriteRenderer SpriteRndTopLeft;
-        bool frontFaced;
+        public bool FrontFaced { get; private set; }
 
         CardValue value;
 
@@ -30,7 +30,7 @@ namespace WWTEST
         /// </summary>
         public void Flip()
         {
-            frontFaced = !frontFaced;
+            FrontFaced = !FrontFaced;
 
             if (tweenFlip != null && tweenFlip.IsPlaying())
                 tweenFlip.Complete();
@@ -38,7 +38,7 @@ namespace WWTEST
             //Tween that manage rotation and sprite change
             tweenFlip = transform.DORotate(new Vector3(0, 90, 0), flipTime/2).OnComplete(() =>
             {
-                if (!frontFaced)
+                if (!FrontFaced)
                 {
                     SpriteRndBase.sprite = back;
                     SpriteRndCenter.enabled = false;

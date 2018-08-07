@@ -91,22 +91,29 @@ namespace WWTEST
         /// </summary>
         private void OnInputRelease()
         {
-            if(currentDeckInputOver == null)
+            if(currentDeckInputOver != null)
             {
-                ReleaseDraggedCard();
-                return;
+                if (currentDeckInputOver.deckType == DeckController.DeckType.Column)
+                {
+                    //Check if the card added is one more greater than actual and if they are of the same seed
+                    if (CheckIfCardMatch(currentDeckInputOver.GetTopCardValue(), draggedCard.GetValue(), true))
+                    {
+                        currentDeckInputOver.AddTopCard(draggedCard);
+                        ReleaseDraggedCard(false);
+                    }
+                }
+                else if(currentDeckInputOver.deckType == DeckController.DeckType.Seed)
+                {
+                    //Check if the card added is one less than actual and if they are of the same seed
+                    if (CheckIfCardMatch(currentDeckInputOver.GetTopCardValue(), draggedCard.GetValue(), false))
+                    {
+                        currentDeckInputOver.AddTopCard(draggedCard);
+                        ReleaseDraggedCard(false);
+                    }
+                }
             }
-            else if(currentDeckInputOver.deckType == DeckController.DeckType.Seed || currentDeckInputOver.deckType == DeckController.DeckType.Column)
-            {
-                if (CheckIfCardMatch(currentDeckInputOver.GetTopCardValue(), draggedCard.GetValue()))
-                    currentDeckInputOver.AddTopCard(draggedCard);
-                else
-                    ReleaseDraggedCard();
-            }
-            else
-            {
-                ReleaseDraggedCard();
-            }
+
+            ReleaseDraggedCard(true);
         }
 
         /// <summary>
@@ -117,21 +124,27 @@ namespace WWTEST
         /// <param name="_base"></param>
         /// <param name="_addition"></param>
         /// <returns></returns>
-        private bool CheckIfCardMatch(CardValue _base, CardValue _addition)
+        private bool CheckIfCardMatch(CardValue _base, CardValue _addition, bool _ascendent)
         {
             //False if backsided card
             if (_addition.Number == 0)
                 return false;
 
-            if (_base.Seed != _addition.Seed)
-                return false;
-
-            if (_base.Number != _addition.Number + 1)
-                return false;
-
             //Ace exception
             if (_base.Number == 0 && _addition.Number == 1)
                 return true;
+
+            if (_base.Seed != _addition.Seed)
+                return false;
+
+            if (_ascendent)
+            {
+                if (_base.Number != _addition.Number + 1)
+                    return false;
+            }
+            else
+                if (_base.Number != _addition.Number - 1)
+                return false;
 
             return true;
         }
@@ -139,12 +152,21 @@ namespace WWTEST
         /// <summary>
         /// Return the card to original deck
         /// </summary>
-        private void ReleaseDraggedCard()
+        private void ReleaseDraggedCard(bool _giveBackToOriginalDeck)
         {
             if (draggedCard == null)
                 return;
 
-            draggedCardOriginalDeck.AddTopCard(draggedCard);
+            if (_giveBackToOriginalDeck)
+                draggedCardOriginalDeck.AddTopCard(draggedCard);
+            else if(draggedCardOriginalDeck.deckType == DeckController.DeckType.Column)
+                draggedCardOriginalDeck.DrawCard(true, true);
+            else if (draggedCardOriginalDeck.deckType == DeckController.DeckType.DrawnCards)
+            {
+                draggedCardOriginalDeck.DrawCard(true, false);
+                draggedCardOriginalDeck.OrderCards();
+            }
+
             draggedCard = null;
             isDragging = false;
         }
@@ -157,9 +179,15 @@ namespace WWTEST
         {
             if (_deck.deckType == DeckController.DeckType.Main)
             {
-                _deck.DrawCard(true);
+                _deck.DrawCard(false, true);
                 _deck.TransferTopCard(DeckDrawnCards);
             }
+            //Previous system where player has to flip the card by himself
+            //if(_deck.deckType == DeckController.DeckType.Column)
+            //{
+            //    if(!_deck.IsTopCardFrontSide)
+            //        _deck.DrawCard(true, true);
+            //}
         }
 
         /// <summary>
@@ -204,14 +232,14 @@ namespace WWTEST
         {
             while(_amount > 1)
             {
-                DeckMain.DrawCard(false);
+                DeckMain.DrawCard(false, false);
                 DeckMain.TransferTopCard(_dCtrl);
                 _amount--;
             }
 
             if(_amount == 1)
             {
-                DeckMain.DrawCard(true);
+                DeckMain.DrawCard(false, true);
                 DeckMain.TransferTopCard(_dCtrl);
                 return;
             }
