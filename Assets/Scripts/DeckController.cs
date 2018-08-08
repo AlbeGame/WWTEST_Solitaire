@@ -184,7 +184,8 @@ namespace WWTEST
         public void TransferTopCard(DeckController _newDeck)
         {
             CardBehaviour card = RemoveTopCard();
-            _newDeck.AddTopCard(card);
+            if(card != null)
+                _newDeck.AddTopCard(card);
         }
 
         /// <summary>

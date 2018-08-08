@@ -14,6 +14,7 @@ namespace WWTEST
         int moves;
 
         public GameObject PauseMenu;
+        public Text Options;
 
         /// <summary>
         /// Initialize the class
@@ -26,6 +27,20 @@ namespace WWTEST
             SetPoints(_points);
             SetMoves(_moves);
             ToggleOptionMenu(false);
+
+            Options.text = "OPZIONI";
+        }
+
+        public void DisplayVictoryMenu()
+        {
+            Options.text = "VITTORIA";
+            ToggleOptionMenu(true);
+        }
+
+        public void DisplayDefeatMenu()
+        {
+            Options.text = "SCONFITTA";
+            ToggleOptionMenu(true);
         }
 
         /// <summary>
@@ -46,7 +61,12 @@ namespace WWTEST
         {
             MovesController.Move moveToShow = MovesCalculator.GetHint();
             if (moveToShow == null)
+            {
+                if (GameManager.I.DeckMng.DeckMain.GetTopCard() == null)
+                    DisplayDefeatMenu();
+
                 return;
+            }
 
             moveToShow.Card.BlinkForHint();
             //Also show destination... maybe too much int

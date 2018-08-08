@@ -114,10 +114,29 @@ namespace WWTEST
                         currentDeckInputOver.AddTopCard(draggedCard);
                         ReleaseDraggedCard(false);
                     }
+
+                    //If won, show it
+                    if (CheckVictory())
+                        GameManager.I.InterfaceCtrl.DisplayVictoryMenu();
                 }
             }
 
             ReleaseDraggedCard(true);
+        }
+
+        /// <summary>
+        /// Check the victory status of the game
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckVictory()
+        {
+            for (int i = 0; i < DecksSeed.Count; i++)
+            {
+                if (DecksSeed[i].GetTopCardValue().Number != 13)
+                    return false;
+            }
+
+            return true;
         }
 
         /// <summary>
