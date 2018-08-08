@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace WWTEST
 {
@@ -8,7 +9,7 @@ namespace WWTEST
         public DeckData CardsData;
         public static GameManager I { get; private set; }
         public static System.Random RNG { get; private set; }
-        public DeckManager DeckCtrl { get; private set; }
+        public DeckManager DeckMng { get; private set; }
         public MovesController MoveCtrl { get; private set; }
         public InterfaceController InterfaceCtrl { get; private set; }
 
@@ -31,11 +32,11 @@ namespace WWTEST
         public void StartGame()
         {
             //Initialize the deck controller
-            DeckCtrl = GetComponent<DeckManager>();
-            if (DeckCtrl == null)
-                DeckCtrl = gameObject.AddComponent<DeckManager>();
+            DeckMng = GetComponent<DeckManager>();
+            if (DeckMng == null)
+                DeckMng = gameObject.AddComponent<DeckManager>();
 
-            DeckCtrl.Init();
+            DeckMng.Init();
 
             //Initialize the move controller
             MoveCtrl = GetComponent<MovesController>();
@@ -47,6 +48,13 @@ namespace WWTEST
             //Initialize the interface controller
             InterfaceCtrl = FindObjectOfType<InterfaceController>();
             InterfaceCtrl.Init();
+
+            //Initialize the MoveController with the avaiable decks
+            List<DeckController> decks = new List<DeckController>();
+            decks.Add(DeckMng.DeckDrawnCards);
+            decks.AddRange(DeckMng.DecksColumn);
+            decks.AddRange(DeckMng.DecksSeed);
+            MovesCalculator.Init(decks);
         }
 
         [System.Serializable]

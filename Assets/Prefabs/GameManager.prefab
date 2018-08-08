@@ -958,17 +958,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DeckMain: {fileID: 114768720658985742}
   DeckDrawnCards: {fileID: 114895137996144656}
-  DeckClubs: {fileID: 114233788235431906}
-  DeckDiamonds: {fileID: 114642915332983960}
-  DeckHearts: {fileID: 114578344604476260}
-  DeckSpades: {fileID: 114508777117722526}
-  DeckColumn1: {fileID: 114647810709507558}
-  DeckColumn2: {fileID: 114321267842243664}
-  DeckColumn3: {fileID: 114805634682798762}
-  DeckColumn4: {fileID: 114786149912467894}
-  DeckColumn5: {fileID: 114396222580157752}
-  DeckColumn6: {fileID: 114035012365836604}
-  DeckColumn7: {fileID: 114809658824406836}
+  DecksSeed:
+  - {fileID: 114233788235431906}
+  - {fileID: 114642915332983960}
+  - {fileID: 114578344604476260}
+  - {fileID: 114508777117722526}
+  DecksColumn:
+  - {fileID: 114647810709507558}
+  - {fileID: 114321267842243664}
+  - {fileID: 114805634682798762}
+  - {fileID: 114786149912467894}
+  - {fileID: 114396222580157752}
+  - {fileID: 114035012365836604}
+  - {fileID: 114809658824406836}
+  DrawThreeRule: 0
+  IsPaused: 0
 --- !u!114 &114768720658985742
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1045,6 +1049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c9252d6ddb3b1348ad6f949c82afcb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsPaused: 0
 --- !u!212 &212187157527239400
 SpriteRenderer:
   m_ObjectHideFlags: 1

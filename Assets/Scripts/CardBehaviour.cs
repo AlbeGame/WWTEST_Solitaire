@@ -75,6 +75,18 @@ namespace WWTEST
         }
 
         /// <summary>
+        /// Switch the color of the base to gray for 0.1sec
+        /// </summary>
+        public void BlinkForHint()
+        {
+            Color initialColor = SpriteRndBase.color;
+            SpriteRndBase.DOColor(Color.grey, 0.1f).OnComplete(() =>
+            {
+                SpriteRndBase.DOColor(initialColor, 0.1f);
+            });
+        }
+
+        /// <summary>
         /// Cange the value of the card
         /// and the graphic as well
         /// </summary>

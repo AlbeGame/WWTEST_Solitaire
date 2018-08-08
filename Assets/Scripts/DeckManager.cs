@@ -12,18 +12,9 @@ namespace WWTEST
         public DeckController DeckMain;
         public DeckController DeckDrawnCards;
         [Header("Seed Decks")]
-        public DeckController DeckClubs;
-        public DeckController DeckDiamonds;
-        public DeckController DeckHearts;
-        public DeckController DeckSpades;
+        public List<DeckController> DecksSeed = new List<DeckController>();
         [Header("Columns Decks")]
-        public DeckController DeckColumn1;
-        public DeckController DeckColumn2;
-        public DeckController DeckColumn3;
-        public DeckController DeckColumn4;
-        public DeckController DeckColumn5;
-        public DeckController DeckColumn6;
-        public DeckController DeckColumn7;
+        public List<DeckController> DecksColumn = new List<DeckController>();
 
         public bool DrawThreeRule;
         public void SetDrawThreeRule(bool _value) { DrawThreeRule = _value; }
@@ -47,29 +38,20 @@ namespace WWTEST
             {
                 DeckMain.Shuffle();
             }
-            DeckMain.DisplayCard(new CardValue(), false);
+                DeckMain.DisplayCard(new CardValue(), false);
             //Init of the drawned cards deck
             DeckDrawnCards.Init(this, new List<CardValue>(), DeckController.DeckType.DrawnCards);
             //Init of the seed decks
-            DeckClubs.Init(this, new List<CardValue>(), DeckController.DeckType.Seed);
-            DeckDiamonds.Init(this, new List<CardValue>(), DeckController.DeckType.Seed);
-            DeckHearts.Init(this, new List<CardValue>(), DeckController.DeckType.Seed);
-            DeckSpades.Init(this, new List<CardValue>(), DeckController.DeckType.Seed);
+            for (int i = 0; i < DecksSeed.Count; i++)
+            {
+                DecksSeed[i].Init(this, new List<CardValue>(), DeckController.DeckType.Seed);
+            }
             //Init of the column decks
-            DeckColumn1.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
-            GiveStartingCards(DeckColumn1, 1);
-            DeckColumn2.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
-            GiveStartingCards(DeckColumn2, 2);
-            DeckColumn3.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
-            GiveStartingCards(DeckColumn3, 3);
-            DeckColumn4.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
-            GiveStartingCards(DeckColumn4, 4);
-            DeckColumn5.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
-            GiveStartingCards(DeckColumn5, 5);
-            DeckColumn6.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
-            GiveStartingCards(DeckColumn6, 6);
-            DeckColumn7.Init(this, new List<CardValue>(), DeckController.DeckType.Column);
-            GiveStartingCards(DeckColumn7, 7);
+            for (int i = 0; i < DecksColumn.Count; i++)
+            {
+                DecksColumn[i].Init(this, new List<CardValue>(), DeckController.DeckType.Column);
+                GiveStartingCards(DecksColumn[i], (short)(i+1));
+            }
         }
 
         bool isDragging;
@@ -139,48 +121,6 @@ namespace WWTEST
         }
 
         /// <summary>
-        /// Check main rule of solitaire
-        /// if doesn't _useColumnRules than
-        /// Only high card on lower and only of the same seed
-        /// Otherwise (_useColumnRules == true)
-        /// Lower cards on higher and seeds doesn't matter
-        /// </summary>
-        /// <param name="_base"></param>
-        /// <param name="_addition"></param>
-        /// <returns></returns>
-        private bool CheckIfCardMatch(CardValue _base, CardValue _addition, bool _useColumnRules)
-        {
-            //False if backsided card
-            if (_addition.Number == 0)
-                return false;
-
-            if (_useColumnRules)
-            {
-                //Always allow a card drop on a empty column
-                if (_base.Number == 0)
-                    return true;
-
-                if (_base.Number != _addition.Number + 1)
-                    return false;
-            }
-            else
-            {
-                //Ace exception
-                if (_base.Number == 0 && _addition.Number == 1)
-                    return true;
-
-                //Cards have to be of the same seed only for the seed decks
-                if (_base.Seed != _addition.Seed)
-                    return false;
-
-                if (_base.Number != _addition.Number - 1)
-                    return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Return the card to original deck
         /// </summary>
         private void ReleaseDraggedCard(bool _giveBackToOriginalDeck)
@@ -225,6 +165,48 @@ namespace WWTEST
         private void AssignMove()
         {
             GameManager.I.InterfaceCtrl.AddMoves();
+        }
+
+        /// <summary>
+        /// Check main rule of solitaire
+        /// if doesn't _useColumnRules than
+        /// Only high card on lower and only of the same seed
+        /// Otherwise (_useColumnRules == true)
+        /// Lower cards on higher and seeds doesn't matter
+        /// </summary>
+        /// <param name="_base"></param>
+        /// <param name="_addition"></param>
+        /// <returns></returns>
+        public bool CheckIfCardMatch(CardValue _base, CardValue _addition, bool _useColumnRules)
+        {
+            //False if backsided card
+            if (_addition.Number == 0)
+                return false;
+
+            if (_useColumnRules)
+            {
+                //Always allow a card drop on a empty column
+                if (_base.Number == 0)
+                    return true;
+
+                if (_base.Number != _addition.Number + 1)
+                    return false;
+            }
+            else
+            {
+                //Ace exception
+                if (_base.Number == 0 && _addition.Number == 1)
+                    return true;
+
+                //Cards have to be of the same seed only for the seed decks
+                if (_base.Seed != _addition.Seed)
+                    return false;
+
+                if (_base.Number != _addition.Number - 1)
+                    return false;
+            }
+
+            return true;
         }
 
         /// <summary>

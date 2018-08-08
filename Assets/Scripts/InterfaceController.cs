@@ -35,8 +35,24 @@ namespace WWTEST
         public void ToggleOptionMenu(bool _open)
         {
             PauseMenu.SetActive(_open);
-            GameManager.I.DeckCtrl.IsPaused = _open;
+            GameManager.I.DeckMng.IsPaused = _open;
             GameManager.I.MoveCtrl.IsPaused = _open;
+        }
+
+        /// <summary>
+        /// Display a hint if avaiable
+        /// </summary>
+        public void ShowHint()
+        {
+            MovesController.Move moveToShow = MovesCalculator.GetHint();
+            if (moveToShow == null)
+                return;
+
+            moveToShow.Card.BlinkForHint();
+            //Also show destination... maybe too much int
+            //CardBehaviour otherCard = moveToShow.EndingDeck.GetTopCard();
+            //if(otherCard != null)
+            //    otherCard.BlinkForHint();
         }
 
         /// <summary>
