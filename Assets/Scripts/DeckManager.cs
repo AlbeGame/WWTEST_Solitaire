@@ -25,6 +25,10 @@ namespace WWTEST
         public DeckController DeckColumn6;
         public DeckController DeckColumn7;
 
+        public bool DrawThreeRule;
+        public void SetDrawThreeRule(bool _value) { DrawThreeRule = _value; }
+        public bool IsPaused;
+
         /// <summary>
         /// Initialize the class by creating a new deck
         /// The deck it's also shuffled and all the other cards on the board removed.
@@ -39,7 +43,7 @@ namespace WWTEST
             //Init of the Main Deck
             DeckMain.Init(this, deck, DeckController.DeckType.Main);
             //Shuffle 10 times. Why not?
-            for (int i = 0; i < 10; i++) 
+            for (int i = 0; i < 10; i++)
             {
                 DeckMain.Shuffle();
             }
@@ -90,7 +94,7 @@ namespace WWTEST
         /// </summary>
         private void OnInputRelease()
         {
-            if(currentDeckInputOver != null)
+            if (currentDeckInputOver != null)
             {
                 if (currentDeckInputOver.deckType == DeckController.DeckType.Column)
                 {
@@ -112,7 +116,7 @@ namespace WWTEST
                         ReleaseDraggedCard(false);
                     }
                 }
-                else if(currentDeckInputOver.deckType == DeckController.DeckType.Seed)
+                else if (currentDeckInputOver.deckType == DeckController.DeckType.Seed)
                 {
                     //Check if the card added is one less than actual and if they are of the same seed
                     if (CheckIfCardMatch(currentDeckInputOver.GetTopCardValue(), draggedCard.GetValue(), false))
@@ -186,9 +190,9 @@ namespace WWTEST
 
             if (_giveBackToOriginalDeck)
                 draggedCardOriginalDeck.AddTopCard(draggedCard);                        //Return the card to original Deck
-            else if(draggedCardOriginalDeck.deckType == DeckController.DeckType.Column)
+            else if (draggedCardOriginalDeck.deckType == DeckController.DeckType.Column)
             {
-                if(draggedCardOriginalDeck.IsTopCardFrontSide)                          //Add the card to the new deck and flip the top   
+                if (draggedCardOriginalDeck.IsTopCardFrontSide)                          //Add the card to the new deck and flip the top   
                     draggedCardOriginalDeck.DrawCard(true, false);                      //card of the original deck if it wasn't already flipped (front side)
                 else
                 {
@@ -229,10 +233,19 @@ namespace WWTEST
         /// <param name="_deck"></param>
         public void OnInputDonwAndUpRecived(DeckController _deck)
         {
+            if (IsPaused)
+                return;
+
             if (_deck.deckType == DeckController.DeckType.Main)
             {
-                _deck.DrawCard(false, true);
-                _deck.TransferTopCard(DeckDrawnCards);
+                int amount = DrawThreeRule ? 3 : 1;
+                for (int i = 0; i < amount; i++)
+                {
+                    _deck.DrawCard(false, true);
+                    _deck.TransferTopCard(DeckDrawnCards);
+                }
+                //It stores a move of "draw" by the main deck. Not sure if requested
+                //GameManager.I.MoveCtrl.RecordMove(0, DeckDrawnCards.GetTopCard(), _deck, DeckDrawnCards);
             }
             //Previous system where player has to flip the card by himself
             //if(_deck.deckType == DeckController.DeckType.Column)
@@ -248,7 +261,10 @@ namespace WWTEST
         /// <param name="_deck"></param>
         public void OnInputDownRecived(DeckController _deck)
         {
-            if(_deck.deckType == DeckController.DeckType.DrawnCards || _deck.deckType == DeckController.DeckType.Column)
+            if (IsPaused)
+                return;
+
+            if (_deck.deckType == DeckController.DeckType.DrawnCards || _deck.deckType == DeckController.DeckType.Column)
             {
                 draggedCard = _deck.RemoveTopCard();
                 draggedCardOriginalDeck = _deck;
@@ -262,6 +278,9 @@ namespace WWTEST
         /// <param name="_deck"></param>
         public void OnInputEnterRecived(DeckController _deck)
         {
+            if (IsPaused)
+                return;
+
             currentDeckInputOver = _deck;
         }
 
@@ -271,6 +290,9 @@ namespace WWTEST
         /// <param name="_deck"></param>
         public void OnInputExit(DeckController _deck)
         {
+            if (IsPaused)
+                return;
+
             currentDeckInputOver = null;
         }
 
@@ -282,14 +304,14 @@ namespace WWTEST
         /// <param name="_amount"></param>
         public void GiveStartingCards(DeckController _dCtrl, short _amount)
         {
-            while(_amount > 1)
+            while (_amount > 1)
             {
                 DeckMain.DrawCard(false, false);
                 DeckMain.TransferTopCard(_dCtrl);
                 _amount--;
             }
 
-            if(_amount == 1)
+            if (_amount == 1)
             {
                 DeckMain.DrawCard(false, true);
                 DeckMain.TransferTopCard(_dCtrl);

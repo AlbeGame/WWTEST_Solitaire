@@ -8,11 +8,12 @@ namespace WWTEST
     /// </summary>
     public class InterfaceController : MonoBehaviour
     {
-
         public Text PointsText;
         int points;
         public Text MovesText;
         int moves;
+
+        public GameObject PauseMenu;
 
         /// <summary>
         /// Initialize the class
@@ -24,6 +25,18 @@ namespace WWTEST
         {
             SetPoints(_points);
             SetMoves(_moves);
+            ToggleOptionMenu(false);
+        }
+
+        /// <summary>
+        /// If _open == true, it opens the option menu and pause the game
+        /// </summary>
+        /// <param name="_open"></param>
+        public void ToggleOptionMenu(bool _open)
+        {
+            PauseMenu.SetActive(_open);
+            GameManager.I.DeckCtrl.IsPaused = _open;
+            GameManager.I.MoveCtrl.IsPaused = _open;
         }
 
         /// <summary>

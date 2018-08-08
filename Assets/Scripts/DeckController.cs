@@ -31,8 +31,17 @@ namespace WWTEST
         {
             deckMng = _mng;
 
+            deck.Clear();
             deck = _deck;
             deckType = _type;
+
+            if(deckGraphic.Count > 0)
+                for (int i = 0; i < deckGraphic.Count; i++)
+                {
+                    Destroy(deckGraphic[i].gameObject);
+                }
+
+            deckGraphic.Clear();
         }
 
         /// <summary>
@@ -222,6 +231,32 @@ namespace WWTEST
                 return deckGraphic.Last().GetValue();
             else
                 return new CardValue();
+        }
+
+        /// <summary>
+        /// Return the card on the top of the deck
+        /// </summary>
+        /// <returns></returns>
+        public CardBehaviour GetTopCard()
+        {
+            if (deckGraphic.Count > 0)
+                return deckGraphic.Last();
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// Return a list of CardBehaviour where care are front faced
+        /// </summary>
+        /// <returns></returns>
+        public List<CardBehaviour> GetFrontSizedCards()
+        {
+            List<CardBehaviour> cardsFS = new List<CardBehaviour>();
+            if (deckGraphic.Count <= 0)
+                return cardsFS;
+
+            cardsFS = deckGraphic.Where(c => c.FrontFaced == true).ToList();
+            return cardsFS;
         }
 
         #region Collider based Input

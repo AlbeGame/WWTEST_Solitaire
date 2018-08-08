@@ -25,6 +25,11 @@ namespace WWTEST
 
         private void Start()
         {
+            StartGame();
+        }
+
+        public void StartGame()
+        {
             //Initialize the deck controller
             DeckCtrl = GetComponent<DeckManager>();
             if (DeckCtrl == null)
